@@ -1,0 +1,18 @@
+apply plugin: (targetMinecraft.startsWith('26.') ? 'net.fabricmc.fabric-loom' : 'fabric-loom')
+dependencies {
+    minecraft "com.mojang:minecraft:${targetMinecraft}"
+    if (!targetMinecraft.startsWith('26.')) {
+        mappings loom.officialMojangMappings()
+    }
+    if (targetMinecraft.startsWith('26.')) {
+        implementation "net.fabricmc:fabric-loader:${targetPins.getProperty('fabric.version')}"
+    } else {
+        modImplementation "net.fabricmc:fabric-loader:${targetPins.getProperty('fabric.version')}"
+    }
+}
+loom {
+    runs {
+        client { client(); runDir(new File(templateRoot,"run/${targetMinecraft}/fabric/client").absolutePath) }
+        server { server(); runDir(new File(templateRoot,"run/${targetMinecraft}/fabric/server").absolutePath) }
+    }
+}

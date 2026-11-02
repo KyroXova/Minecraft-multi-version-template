@@ -1,0 +1,41 @@
+apply plugin: targetPins.getProperty('neoforge.plugin')
+java { toolchain.languageVersion = JavaLanguageVersion.of(targetPins.getProperty('java.release').toInteger()) }
+if (targetPins.getProperty('neoforge.plugin') == 'net.neoforged.moddev') {
+    neoForge {
+        version = targetPins.getProperty('neoforge.version')
+        runs {
+            client { client(); gameDirectory = new File(templateRoot,"run/${targetMinecraft}/neoforge/client") }
+            server { server(); gameDirectory = new File(templateRoot,"run/${targetMinecraft}/neoforge/server") }
+        }
+        mods { examplemod { sourceSet sourceSets.main } }
+    }
+} else {
+    // Library lists contain absolute paths and must not be reused across workspaces.
+    tasks.matching { it.name.endsWith('ListLibraries') || it.name.endsWith('ListTransformLibraries') }.configureEach {
+        inputs.property('templateLibraryListRoot', projectDir.absolutePath)
+    }
+    def requestedTasks = gradle.startParameter.taskNames.collect { it.toLowerCase() }
+    tasks.matching { it.name.endsWith('DownloadAssets') }.configureEach {
+        onlyIf('Client assets are required for client launch or IDE setup') {
+            project.findProperty('downloadAssets') == 'true' || requestedTasks.any {
+                it.contains('client') || it.contains('prepare') || it.contains('idea') || it.contains('eclipse') || it.contains('rundata')
+            }
+        }
+    }
+    // JST requires Java 21 even when Minecraft and the mod target Java 17.
+    gradle.projectsEvaluated {
+        tasks.matching { it.name == 'neoFormTransformSource' }.configureEach {
+            javaVersion.set(JavaLanguageVersion.of(21))
+            javaLauncher.set(javaToolchains.launcherFor { languageVersion = JavaLanguageVersion.of(21) })
+        }
+    }
+    dependencies { implementation "net.neoforged:neoforge:${targetPins.getProperty('neoforge.version')}" }
+    runs {
+        configureEach {
+            modSource sourceSets.main
+            workingDirectory = new File(templateRoot,"run/${targetMinecraft}/neoforge/${name}")
+        }
+        client { }
+        server { }
+    }
+}

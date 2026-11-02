@@ -1,0 +1,43 @@
+apply plugin: 'net.minecraftforge.gradle'
+if (targetPins.getProperty('forge.gradle').startsWith('7.')) {
+    minecraft {
+        if (!targetMinecraft.startsWith('26.')) {
+            mappings channel: 'official', version: targetMinecraft
+        }
+        runs {
+            configureEach { workingDir = new File(templateRoot,"run/${targetMinecraft}/forge/${name}") }
+            register('client')
+            register('server') { args '--nogui' }
+        }
+    }
+    repositories {
+        minecraft.mavenizer(it)
+        maven fg.forgeMaven
+        maven fg.minecraftLibsMaven
+    }
+    dependencies { implementation minecraft.dependency("net.minecraftforge:forge:${targetMinecraft}-${targetPins.getProperty('forge.version')}") }
+} else {
+minecraft {
+    reobf = targetPins.getProperty('forge.reobfuscate', 'true').toBoolean()
+    mappings channel: targetPins.getProperty('forge.mappings.channel'), version: targetPins.getProperty('forge.mappings.version')
+    runs {
+        client {
+            workingDirectory new File(templateRoot,"run/${targetMinecraft}/forge/client")
+            mods { examplemod { source sourceSets.main } }
+        }
+        server {
+            workingDirectory new File(templateRoot,"run/${targetMinecraft}/forge/server")
+            mods { examplemod { source sourceSets.main } }
+        }
+    }
+}
+dependencies { minecraft "net.minecraftforge:forge:${targetMinecraft}-${targetPins.getProperty('forge.version')}" }
+gradle.projectsEvaluated {
+    def reobfuscate = tasks.findByName('reobfJar')
+    if (reobfuscate != null) {
+        tasks.named('jar') { finalizedBy(reobfuscate) }
+    } else if (targetPins.getProperty('java.release').toInteger() < 21) {
+        throw new GradleException('The legacy Forge target requires reobfJar')
+    }
+}
+}

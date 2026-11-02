@@ -1,0 +1,27 @@
+{
+  "fabric": {
+    "gradle": "9.6.0",
+    "java": 25,
+    "wrapper_sha256": "497c8c2a7e5031f6aa847f88104aa80a93532ec32ee17bdb8d1d2f67a194a9c7"
+  },
+  "forge": {
+    "gradle": "8.8",
+    "java": 21,
+    "wrapper_sha256": "cb0da6751c2b753a16ac168bb354870ebb1e162e9083f116729cec9c781156b8"
+  },
+  "neoforge": {
+    "gradle": "8.14.3",
+    "java": 21,
+    "wrapper_sha256": "7d3a4ac4de1c32b59bc6a4eb8ecb8e612ccd0cf1ae1e99f66902da64df296172"
+  },
+  "neoforge26": {
+    "gradle": "9.6.0",
+    "java": 25,
+    "wrapper_sha256": "497c8c2a7e5031f6aa847f88104aa80a93532ec32ee17bdb8d1d2f67a194a9c7"
+  },
+  "forge7": {
+    "gradle": "9.7.1",
+    "java": 25,
+    "wrapper_sha256": "7a9ce74cff467ca1bf60a4fcd9f05185acceda4d0f382434d393e17864262c5d"
+  }
+}

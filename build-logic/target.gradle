@@ -1,0 +1,49 @@
+buildscript {
+    def template = file(project.findProperty('templateRoot') ?: '.')
+    project.ext.templateRoot = template
+    def mc = project.findProperty('mc') ?: '1.20.1'
+    def loader = project.hasProperty('core') ? 'core' : (project.findProperty('loader') ?: 'fabric')
+    def pins = new Properties()
+    def pinFile = new File(template, "properties/${mc}.properties")
+    if (loader == 'core' && !pinFile.isFile()) {
+        pins.setProperty('java.release', '8')
+        pins.setProperty('loaders', '')
+    }
+    if (loader != 'core' && !pinFile.isFile()) throw new GradleException("Unknown Minecraft target: ${mc}")
+    if (pinFile.isFile()) pinFile.withInputStream { pins.load(it) }
+    if (loader != 'core' && !pins.getProperty('loaders').split(',').contains(loader)) {
+        throw new GradleException("${loader} is unavailable for ${mc}; see targets.json")
+    }
+    project.ext.targetPins = pins
+    project.ext.targetMinecraft = mc
+    project.ext.targetLoader = loader
+    repositories {
+        maven { url = 'https://maven.fabricmc.net/' }
+        maven { url = 'https://maven.minecraftforge.net/' }
+        maven { url = 'https://maven.neoforged.net/releases/' }
+        mavenCentral()
+        gradlePluginPortal()
+    }
+    dependencies {
+        if (loader == 'fabric') classpath "net.fabricmc:fabric-loom:${pins.getProperty('fabric.loom')}"
+        if (loader == 'forge') classpath "net.minecraftforge.gradle:net.minecraftforge.gradle.gradle.plugin:${pins.getProperty('forge.gradle')}"
+        if (loader == 'neoforge') {
+            def plugin = pins.getProperty('neoforge.plugin')
+            classpath "${plugin}:${plugin}.gradle.plugin:${pins.getProperty('neoforge.gradle')}"
+        }
+    }
+}
+
+apply plugin: 'java'
+apply from: new File(templateRoot, 'build-logic/common.gradle')
+if (targetLoader == 'core') {
+    java {
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
+    }
+    tasks.withType(JavaCompile).configureEach { options.release = 8 }
+    sourceSets.main.java.setSrcDirs([new File(templateRoot, 'common/src/main/java')])
+    sourceSets.main.resources.setSrcDirs([new File(templateRoot, 'common/src/main/resources')])
+} else {
+    apply from: new File(templateRoot, "build-logic/${targetLoader}.gradle")
+}

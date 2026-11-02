@@ -1,0 +1,23 @@
+plugins { id 'base' }
+
+def python = System.getProperty('os.name').toLowerCase().contains('windows') ? 'python' : 'python3'
+def helper = file('tools/kyro/template.py').absolutePath
+
+tasks.register('buildTarget', Exec) {
+    commandLine python, helper, 'gradle', "-Pmc=${project.findProperty('mc') ?: '1.20.1'}", "-Ploader=${project.findProperty('loader') ?: 'fabric'}", 'build'
+}
+tasks.named('build') { dependsOn 'buildTarget' }
+tasks.register('cleanTarget', Exec) {
+    commandLine python, helper, 'gradle', "-Pmc=${project.findProperty('mc') ?: '1.20.1'}", "-Ploader=${project.findProperty('loader') ?: 'fabric'}", 'clean'
+}
+tasks.named('clean') {
+    setDelete([] as Set)
+    dependsOn 'cleanTarget'
+}
+['runClient', 'runServer'].each { targetTask ->
+    tasks.register(targetTask, Exec) {
+        commandLine python, helper, 'gradle', "-Pmc=${project.findProperty('mc') ?: '1.20.1'}", "-Ploader=${project.findProperty('loader') ?: 'fabric'}", targetTask
+    }
+}
+tasks.register('coreCheck', Exec) { commandLine python, helper, 'core' }
+tasks.register('validateTemplate', Exec) { commandLine python, helper, 'validate' }
