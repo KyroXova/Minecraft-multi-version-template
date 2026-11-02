@@ -83,6 +83,23 @@
       "unavailable": [
         "neoforge"
       ]
+    },
+    {
+      "minecraft": "1.16.5",
+      "java": 8,
+      "loaders": {
+        "fabric": {
+          "status": "build-verified",
+          "dependency": "0.20.1"
+        },
+        "forge": {
+          "status": "build-verified",
+          "dependency": "36.2.34"
+        }
+      },
+      "unavailable": [
+        "neoforge"
+      ]
     }
   ]
 }
