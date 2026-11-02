@@ -544,6 +544,25 @@
         }
       },
       "unavailable": []
+    },
+    {
+      "minecraft": "1.21.8",
+      "java": 21,
+      "loaders": {
+        "fabric": {
+          "status": "build-verified",
+          "dependency": "0.20.1"
+        },
+        "forge": {
+          "status": "build-verified",
+          "dependency": "58.1.26"
+        },
+        "neoforge": {
+          "status": "build-verified",
+          "dependency": "21.8.57"
+        }
+      },
+      "unavailable": []
     }
   ]
 }
