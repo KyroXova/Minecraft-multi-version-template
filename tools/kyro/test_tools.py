@@ -30,7 +30,6 @@ class TemplateToolsTest(unittest.TestCase):
         self.assertEqual(0,result.returncode,result.stdout+result.stderr)
         self.assertTrue((self.copy / 'common/src/main/java/org/sample/samplemod/TemplateMod.java').is_file())
         self.assertIn('Sample Mod initialized',(self.copy / 'common/src/main/java/org/sample/samplemod/TemplateMod.java').read_text())
-        if not (self.copy / "versions/26.3/fabric/src/main/resources/fabric.mod.json").is_file(): return
         data = json.loads((self.copy / 'versions/26.3/fabric/src/main/resources/fabric.mod.json').read_text())
         self.assertEqual(['org.sample.samplemod.fabric.Entrypoint'],data['entrypoints']['main'])
 

@@ -5,12 +5,8 @@ buildscript {
     def loader = project.hasProperty('core') ? 'core' : (project.findProperty('loader') ?: 'fabric')
     def pins = new Properties()
     def pinFile = new File(template, "properties/${mc}.properties")
-    if (loader == 'core' && !pinFile.isFile()) {
-        pins.setProperty('java.release', '8')
-        pins.setProperty('loaders', '')
-    }
-    if (loader != 'core' && !pinFile.isFile()) throw new GradleException("Unknown Minecraft target: ${mc}")
-    if (pinFile.isFile()) pinFile.withInputStream { pins.load(it) }
+    if (!pinFile.isFile()) throw new GradleException("Unknown Minecraft target: ${mc}")
+    pinFile.withInputStream { pins.load(it) }
     if (loader != 'core' && !pins.getProperty('loaders').split(',').contains(loader)) {
         throw new GradleException("${loader} is unavailable for ${mc}; see targets.json")
     }

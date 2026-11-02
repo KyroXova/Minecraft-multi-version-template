@@ -89,7 +89,7 @@ def validate():
         wrapper = properties(directory / 'gradle-wrapper.properties')
         assert re.fullmatch(r'[a-f0-9]{64}',wrapper['distributionSha256Sum']), profile
     assert len({t['minecraft'] for t in targets}) == len(targets), 'Duplicate versions'
-    assert not targets or targets[0]['minecraft'] == '1.16'
+    assert targets[0]['minecraft'] == '1.16' and targets[-1]['minecraft'] == '26.3'
     common = list((ROOT / 'common/src/main/java').rglob('*.java'))
     for source in common:
         assert not re.search(r'import\s+(net\.minecraft|net\.fabricmc|net\.minecraftforge|net\.neoforged)',source.read_text()), source
