@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "id": "${mod_id}",
+  "version": "${mod_version}",
+  "name": "${mod_name}",
+  "description": "${mod_description}",
+  "license": "${mod_license}",
+  "environment": "*",
+  "entrypoints": { "main": ["dev.example.examplemod.fabric.Entrypoint"] },
+  "depends": { "fabricloader": ">=${loader_version}", "minecraft": "${minecraft_version}", "java": ">=${java_release}" }
+}
