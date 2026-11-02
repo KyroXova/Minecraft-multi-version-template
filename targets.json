@@ -267,6 +267,23 @@
       "unavailable": [
         "neoforge"
       ]
+    },
+    {
+      "minecraft": "1.20",
+      "java": 17,
+      "loaders": {
+        "fabric": {
+          "status": "build-verified",
+          "dependency": "0.20.1"
+        },
+        "forge": {
+          "status": "build-verified",
+          "dependency": "46.0.14"
+        }
+      },
+      "unavailable": [
+        "neoforge"
+      ]
     }
   ]
 }
