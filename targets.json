@@ -100,6 +100,20 @@
       "unavailable": [
         "neoforge"
       ]
+    },
+    {
+      "minecraft": "1.17",
+      "java": 16,
+      "loaders": {
+        "fabric": {
+          "status": "build-verified",
+          "dependency": "0.20.1"
+        }
+      },
+      "unavailable": [
+        "forge",
+        "neoforge"
+      ]
     }
   ]
 }
