@@ -2,12 +2,12 @@
 
 Shared Java core and isolated native loader build profiles.
 
-This checkpoint contains 7 Minecraft release(s).
+This checkpoint contains 8 Minecraft release(s).
 
 Run `python tools/kyro/template.py core` to build and test the shared foundation.
 
-Latest target: 1.17; loaders: fabric.
+Latest target: 1.17.1; loaders: fabric, forge.
 
-Build explicitly with `python tools/kyro/template.py gradle "-Pmc=1.17" "-Ploader=fabric" build`.
+Build explicitly with `python tools/kyro/template.py gradle "-Pmc=1.17.1" "-Ploader=fabric" build`.
 
 Shared logic belongs in `common/`; adapters belong in `versions/`; pins belong in `properties/`; build behavior belongs in `build-logic/`.
